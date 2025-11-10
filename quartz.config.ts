@@ -1,5 +1,7 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import { CustomOgImages } from "./quartz/plugins/emitters/ogImage"
+
 
 /**
  * Quartz 4 Configuration
@@ -8,7 +10,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "Quartz 4",
+    pageTitle: "dksshddl 블로그에요",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,

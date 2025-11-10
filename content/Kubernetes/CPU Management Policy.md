@@ -39,6 +39,26 @@ htop으로 CPU 사용량을 보면 아래와 같이 CPU core를 골고루 사용
 >[!info]
  Guaranteed Pod는 requests와 limits 를 동일하게 설정하면 생성할 수 있다. [2] Node는 리소스가 부족해지면 BestEffort > Burstable > Guaranteed 순서로 Pod를 evict 시킨다.
 
+EKS AL2023에서는 아래와 같이 cpuManagerPolicy와 reseved 값을 명시할 수 있다.
+```yaml
+apiVersion: node.eks.aws/v1alpha1
+kind: NodeConfig
+spec:
+  cluster:
+    apiServerEndpoint: `<API_SERVER_ENDPOINT>`
+    certificateAuthority: `<CertificateAuthority>`
+    cidr: `<SERVICE_CIDR>`
+    name: `<CLUSTER_NAME>`
+  kubelet:
+    config:
+      cpuManagerPolicy: static
+      kubeReserved:
+        cpu: "500m"
+        memory: 500Mi
+      systemReserved:
+        cpu: "500m"
+        memory: 500Mi
+```
 ### 살펴보기
 내부 구현으로 CPU를 할당하는 과정은 ```policy_static.go```[3] 함수에서 확인할 수 있었다.
 그 중 가장 중요한 로직 takeByTopology 함수에서 확인할 수 있따.

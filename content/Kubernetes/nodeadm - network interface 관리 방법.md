@@ -1,5 +1,9 @@
-1002 릴리즈 부터 eks ami에서는 network interface를 처리하는 새로운 기능이 [1]에서 추가됐고, 해당 기능에 대해 자세히 살펴보았다.
 
+## Intro
+
+v1002 릴리즈 부터 eks ami에서는 network interface를 처리하는 새로운 기능이 [1]에서 추가됐고, 해당 기능에 대해 자세히 살펴보았다.
+
+## Deep dive
 
 먼저 해당 기능이 추가된 이유에 대해서는 [1]에서 자세히 소개되어있다.  ```amazon-ec2-net-utils``` 과 nodeadm사이에 node bootstrap시 구성하는 Network 설정문제간 race condition이 있었다.
 
@@ -102,6 +106,25 @@ race condition이나 네트워크 구성 트러블슛팅할때 확인할 수 있
 아직 log collector에 해당 로그가 수집되지 않아서, 애를 먹었었다.. 그래서 [PR](https://github.com/awslabs/amazon-eks-ami/pull/2490) 올렸더니 lint 수정 후 바로 merge 됐다.
 
 
+## Troubleshooting
+
+여기서 문제가되는 부분은 바로 여기이다.
+
+> cloud-init의 종료를 기점으로, 종료전 추가된 interface에는 systemd에 관리되는것으로, 종료 이후에는 CNI에 의해 관리되는 것으로 network device에 마킹한다.
+
+cloud-init이 종료된 이후에 생성된 network interface에 대하여만, systemd에 의해 추가 라우팅을 구성해야하는데, cloud-init이 시작되며 nodeadm이 또한 시작되면 race condition이 발생할 수 있다.
+
+CNI 입장에서야, network interface가 systemd/CNI에 의해 관리되는지 알 바가 아니지만 노드 레벨에서는 CNI가 관리하는 ENI와 systemd가 관리되는 경우 라우팅 규칙이 다를 수 있기 떄문에 다르게 관리 되어야한다.
+
+만일, 아래 순서로 초기화된다면 문제가 된다.
+1. cloud-init 도중 kubelet이 시작되고, CNI가 올라와 라우팅 규칙 설정
+2. systemd가 다시 한번 라우팅 규칙 설정하여 CNI 규칙에 덮어씀
+3. CNI는 정상적으로 라우팅 규칙을 설정한것으로 인지하고, IPAM에 따라 pod에 해당 Netowrk Interface에 IP 할당.
+
+>[!info]
+> systemd에 의해 관리되는 경우에 대하여 예를들면 노드에 `attach-network-interface`로 onprem 등 연결하기 위한 추가 ENI를 직접 붙이는 경우가 있겠다.
+
+reference
 [1] https://github.com/awslabs/amazon-eks-ami/pull/2419 
 
 [2] https://github.com/awslabs/amazon-eks-ami/pull/2324
