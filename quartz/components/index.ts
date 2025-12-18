@@ -23,6 +23,9 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
+import AboutLink from "./AboutLink"
+import SidebarToggle from "./SidebarToggle"
+import StickyHeader from "./StickyHeader"
 
 export {
   ArticleTitle,
@@ -50,4 +53,7 @@ export {
   Comments,
   Flex,
   ConditionalRender,
+  AboutLink,
+  SidebarToggle,
+  StickyHeader,
 }

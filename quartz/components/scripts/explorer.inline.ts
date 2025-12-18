@@ -95,6 +95,18 @@ function createFileNode(currentSlug: FullSlug, node: FileTrieNode): HTMLLIElemen
   return li
 }
 
+function countFiles(node: FileTrieNode): number {
+  let count = 0
+  for (const child of node.children) {
+    if (child.isFolder) {
+      count += countFiles(child)
+    } else {
+      count++
+    }
+  }
+  return count
+}
+
 function createFolderNode(
   currentSlug: FullSlug,
   node: FileTrieNode,
@@ -111,6 +123,8 @@ function createFolderNode(
   const folderPath = node.slug
   folderContainer.dataset.folderpath = folderPath
 
+  const fileCount = countFiles(node)
+
   if (opts.folderClickBehavior === "link") {
     // Replace button with link for link behavior
     const button = titleContainer.querySelector(".folder-button") as HTMLElement
@@ -118,11 +132,11 @@ function createFolderNode(
     a.href = resolveRelative(currentSlug, folderPath)
     a.dataset.for = folderPath
     a.className = "folder-title"
-    a.textContent = node.displayName
+    a.innerHTML = `${node.displayName} <span class="folder-count">(${fileCount})</span>`
     button.replaceWith(a)
   } else {
     const span = titleContainer.querySelector(".folder-title") as HTMLElement
-    span.textContent = node.displayName
+    span.innerHTML = `${node.displayName} <span class="folder-count">(${fileCount})</span>`
   }
 
   // if the saved state is collapsed or the default state is collapsed

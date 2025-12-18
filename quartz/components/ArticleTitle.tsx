@@ -1,5 +1,7 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { classNames } from "../util/lang"
+// @ts-ignore
+import script from "./scripts/articleTitle.inline"
 
 const ArticleTitle: QuartzComponent = ({ fileData, displayClass }: QuartzComponentProps) => {
   const title = fileData.frontmatter?.title
@@ -15,5 +17,7 @@ ArticleTitle.css = `
   margin: 2rem 0 0 0;
 }
 `
+
+ArticleTitle.afterDOMLoaded = script
 
 export default (() => ArticleTitle) satisfies QuartzComponentConstructor

@@ -1,11 +1,35 @@
+@use "../../styles/variables.scss" as *;
+
 .breadcrumb-container {
   margin: 0;
-  margin-top: 0.75rem;
-  padding: 0;
+  padding: 0.75rem 0 0.5rem 0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 0.5rem;
+
+  @media all and ($mobile) {
+    padding: 0.75rem 0;
+  }
+}
+
+.breadcrumbs-fixed {
+  position: fixed;
+  top: 0;
+  background: var(--light);
+  z-index: 1000;
+  border-bottom: 1px solid var(--lightgray);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.75rem 2rem 0.5rem 2rem;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @media all and ($mobile) {
+    display: none !important;
+  }
 }
 
 .breadcrumb-element {

@@ -3,6 +3,8 @@ import breadcrumbsStyle from "./styles/breadcrumbs.scss"
 import { FullSlug, SimpleSlug, resolveRelative, simplifySlug } from "../util/path"
 import { classNames } from "../util/lang"
 import { trieFromAllFiles } from "../util/ctx"
+// @ts-ignore
+import script from "./scripts/breadcrumbs.inline"
 
 type CrumbData = {
   displayName: string
@@ -88,6 +90,8 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
     )
   }
   Breadcrumbs.css = breadcrumbsStyle
+  // @ts-ignore
+  Breadcrumbs.afterDOMLoaded = script
 
   return Breadcrumbs
 }) satisfies QuartzComponentConstructor

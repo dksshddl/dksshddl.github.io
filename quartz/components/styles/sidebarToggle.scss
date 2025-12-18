@@ -1,0 +1,104 @@
+@use "../../styles/variables.scss" as *;
+
+.sidebar-toggle {
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  background: none;
+  border: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  text-align: inherit;
+  flex-shrink: 0;
+
+  & svg {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: calc(50% - 10px);
+    fill: var(--darkgray);
+    transition: transform 0.3s ease;
+  }
+
+  @media all and ($mobile) {
+    display: none;
+  }
+}
+
+body.sidebar-collapsed {
+  .sidebar-toggle {
+    position: fixed !important;
+    left: 1rem !important;
+    top: 5rem !important;
+    z-index: 9999 !important;
+    background: var(--light) !important;
+    border: 1px solid var(--lightgray) !important;
+    border-radius: 5px !important;
+    padding: 0.3rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    
+    svg {
+      transform: scaleX(-1) !important;
+      position: static !important;
+      top: 0 !important;
+    }
+    
+    &:hover {
+      background: var(--lightgray) !important;
+    }
+  }
+
+  .sidebar.left {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+
+  .page > #quartz-body {
+    & .center {
+      padding-left: 4rem;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+      
+      & > article {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        
+        & pre,
+        & figure[data-rehype-pretty-code-figure] {
+          max-width: 100%;
+          overflow-x: auto;
+          
+          & > code {
+            max-width: 100%;
+          }
+        }
+        
+        & table {
+          max-width: 100%;
+          overflow-x: auto;
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.sidebar.left {
+  transition: grid-template-columns 0.3s ease;
+  
+  & > *:not(.sidebar-toggle) {
+    transition: opacity 0.3s ease;
+  }
+}
+
+.page > #quartz-body {
+  transition: grid-template-columns 0.3s ease;
+}
