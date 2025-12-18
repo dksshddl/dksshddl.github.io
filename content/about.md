@@ -1,6 +1,5 @@
 ---
 title: About Me
-visibility: off
 ---
 
 ## 안녕하세요. 현창종입니다. 👋
