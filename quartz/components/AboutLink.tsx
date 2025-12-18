@@ -3,7 +3,7 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 const AboutLink: QuartzComponent = ({ displayClass }: QuartzComponentProps) => {
   return (
     <div class={`about-link ${displayClass ?? ""}`}>
-      <a href="/about">📄 About Me</a>
+      <a href="/about">About Me</a>
     </div>
   )
 }
